@@ -19,7 +19,7 @@ class Ping {
           if (results1[0].roles != null) {
             console.log(results1[0].roles)
             results1[0].roles.split(" ").forEach(element => {
-              if(element != null && interaction.guild.roles.cache.find(i => i.id == element) != undefined){
+              if (element != null && interaction.guild.roles.cache.find(i => i.id == element) != undefined) {
                 lastRoles.push(interaction.guild.roles.cache.find(i => i.id == element))
               }
             });
@@ -35,10 +35,11 @@ class Ping {
           .setDescription("Validation de l'oc...")
       ]
     })
-
+    let exists = true;
     bdd.query(`SELECT * FROM oc WHERE userid = ${interaction.user.id} AND name = "${oc}"`, function (error, results, fields) {
       if (results[0] == null) {
-        return interaction.editReply({
+        exists = false;
+        interaction.editReply({
           embeds: [
             new MessageEmbed()
               .setDescription("Cet oc n'existe pas ou alors, il ne vous appartient pas !")
@@ -47,6 +48,9 @@ class Ping {
       }
     })
     await wait(1000);
+    if (exists == false) {
+      return;
+    }
     //Changer l'oc actif
     interaction.editReply({
       embeds: [
@@ -57,7 +61,7 @@ class Ping {
     bdd.query(`SELECT * FROM users WHERE userid = ${interaction.user.id}`, function (error, results, fields) {
       if (results[0] == null) {
         bdd.query(`INSERT INTO users (userid, activeoc) VALUES (${interaction.user.id} , "${oc}")`)
-      }else{
+      } else {
         bdd.query(`UPDATE users SET activeoc = "${oc}" WHERE userid = ${interaction.user.id}`)
       }
     })
@@ -75,7 +79,7 @@ class Ping {
         bdd.query(`SELECT roles FROM oc WHERE name = "${results[0].activeoc}"`, function (error, results1, fields) {
           if (results1[0].roles != null) {
             results1[0].roles.split(" ").forEach(element => {
-              if(element != null && interaction.guild.roles.cache.find(i => i.id == element) != undefined){
+              if (element != null && interaction.guild.roles.cache.find(i => i.id == element) != undefined) {
                 newRoles.push(interaction.guild.roles.cache.find(i => i.id == element))
               }
             });
@@ -85,40 +89,40 @@ class Ping {
     })
     await wait(1000);
     //Retirer les anciens roles (si nécéssaire)
-    if (interaction.user.id != interaction.guild.ownerId){
+    if (interaction.user.id != interaction.guild.ownerId) {
       interaction.editReply({
         embeds: [
           new MessageEmbed()
             .setDescription("Retrait des anciens roles...")
         ]
       })
-      if(lastRoles[0] != null){
+      if (lastRoles[0] != null) {
         lastRoles.forEach(element => {
-          if(element != null && element != undefined){
+          if (element != null && element != undefined) {
             interaction.member.roles.remove(element)
           }
         })
       }
     }
-    
+
     //Ajouter les nouveaux roles (si nécéssaire)
-    if (interaction.user.id != interaction.guild.ownerId){
+    if (interaction.user.id != interaction.guild.ownerId) {
       interaction.editReply({
         embeds: [
           new MessageEmbed()
             .setDescription("Ajouts des nouveaux roles...")
         ]
       })
-      if(newRoles[0] != null){
+      if (newRoles[0] != null) {
         newRoles.forEach(element => {
-          if(element != null && element != undefined){
+          if (element != null && element != undefined) {
             interaction.member.roles.add(element)
           }
         })
       }
     }
     //Changer le Pseudo
-    if (interaction.user.id != interaction.guild.ownerId){
+    if (interaction.user.id != interaction.guild.ownerId) {
       interaction.editReply({
         embeds: [
           new MessageEmbed()
@@ -133,7 +137,7 @@ class Ping {
             .setColor("#4287f5")
         ]
       })
-    }else{
+    } else {
       interaction.editReply({
         embeds: [
           new MessageEmbed()

@@ -14,76 +14,78 @@ const client = new Client({
 })
 
 client.on('ready', () => {
-  const guildID = "895704892021288971"
-  const guild = client.guilds.cache.get(guildID)
-  let commands
-
-  if (guild) {
-    commands = guild.commands
-  } else {
-    commands = client.application.commands
-  }
-
-  commands?.create({
-    name: "ping",
-    description: "Renvoie pong si le bot est allumé"
-  })
-
-  commands?.create({
-    name: "add_oc",
-    description: "Ajoute un oc a l'utilisateur",
-    options: [
-      {
-        name: "name",
-        description: "Le nom de l'oc",
-        required: true,
-        type: Constants.ApplicationCommandOptionTypes.STRING
-      },
-      {
-        name: "description",
-        description: "La description de l'oc",
-        required: true,
-        type: Constants.ApplicationCommandOptionTypes.STRING
-      },
-      {
-        name: "image_url",
-        description: "L'url du message de l'image de l'oc",
-        required: false,
-        type: Constants.ApplicationCommandOptionTypes.STRING
-      }]
-  })
-
+  client.guilds.cache.forEach(guildd => {
+    const guild = client.guilds.cache.get(guildd.id)
+    let commands
+  
+    if (guild) {
+      commands = guild.commands
+    } else {
+      commands = client.application.commands
+    }
+  
     commands?.create({
-      name: "select_oc",
-      description: "Séléctionne un oc",
+      name: "ping",
+      description: "Renvoie pong si le bot est allumé"
+    })
+  
+    commands?.create({
+      name: "add_oc",
+      description: "Ajoute un oc a l'utilisateur",
       options: [
         {
-          name: "oc",
+          name: "name",
           description: "Le nom de l'oc",
           required: true,
           type: Constants.ApplicationCommandOptionTypes.STRING
-        }
-      ]
-    })
-
-    commands?.create({
-      name: "add_role",
-      description: "Ajoute un role a l'utilisateur et a son oc",
-      options: [
-        {
-          name: "user",
-          description: "L'utilisateur",
-          required: true,
-          type: Constants.ApplicationCommandOptionTypes.USER
         },
         {
-          name: "role",
-          description: "Le role",
+          name: "description",
+          description: "La description de l'oc",
           required: true,
-          type: Constants.ApplicationCommandOptionTypes.ROLE
+          type: Constants.ApplicationCommandOptionTypes.STRING
         },
-      ]
+        {
+          name: "image_url",
+          description: "L'url du message de l'image de l'oc",
+          required: false,
+          type: Constants.ApplicationCommandOptionTypes.STRING
+        }]
     })
+  
+      commands?.create({
+        name: "select_oc",
+        description: "Séléctionne un oc",
+        options: [
+          {
+            name: "oc",
+            description: "Le nom de l'oc",
+            required: true,
+            type: Constants.ApplicationCommandOptionTypes.STRING
+          }
+        ]
+      })
+  
+      commands?.create({
+        name: "add_role",
+        description: "Ajoute un role a l'utilisateur et a son oc",
+        options: [
+          {
+            name: "user",
+            description: "L'utilisateur",
+            required: true,
+            type: Constants.ApplicationCommandOptionTypes.USER
+          },
+          {
+            name: "role",
+            description: "Le role",
+            required: true,
+            type: Constants.ApplicationCommandOptionTypes.ROLE
+          },
+        ]
+      })
+  })
+  
 
   console.log("The bot is ready !")
 })
@@ -117,7 +119,7 @@ function initDB() {
     host: `${process.env.BDDHOST}`,
     user: `${process.env.BDDUSER}`,
     password: `${process.env.BDDPASS}`,
-    database: 'rp_manager'
+    database: 'av32000_discordbotdb'
   });
 
   connection.connect(function (err) {

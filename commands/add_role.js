@@ -3,6 +3,15 @@ const bdd = require('../utils').bdd
 
 class Ping {
   exec(interaction, user, role) {
+    if(!interaction.member.permissions.has("ADMINISTRATOR")){
+      return interaction.reply({
+        embeds: [
+          new MessageEmbed()
+            .setDescription("Vous n'avez pas la permission de faire ça !")
+            .setColor("#f59542")
+        ]
+      })
+    }
     bdd.query(`SELECT * FROM users WHERE EXISTS(SELECT * FROM users WHERE userid = "${interaction.user.id}") AND userid = "${user.id}"`, function (error, results, fields) {
       if (results[0] == null) {
         return interaction.reply({

@@ -21,7 +21,7 @@ class Ping {
             .setDescription(`${description}`)
             .setFooter(`OC de ${interaction.user.tag}`, interaction.user.displayAvatarURL())
 
-          if (image_url != null && image_url.startsWith("https://cdn.discordapp.com/attachments/")) {
+          if (image_url != null && image_url.includes(".png")) {
             embed.setThumbnail(image_url)
             bdd.query(`UPDATE oc SET icon_url = "${image_url}" WHERE name = "${name}"`, function (error, results, fields) {console.log(results)})
           }
